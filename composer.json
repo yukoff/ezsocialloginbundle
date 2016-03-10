@@ -1,0 +1,19 @@
+{
+  "name": "crevillo/ezsocialloginbundle",
+  "description": "Social login for eZ Platform",
+  "license": "GPL-2.0",
+  "authors": [
+    {
+      "name": "Carlos Revillo <crevillo@gmail.com>",
+      "homepage": "https://github.com/crevillo/EzSocialLoginBundle/graphs/contributors"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "hwi/oauth-bundle": "0.4.*"
+  },
+  "autoload": {
+    "psr-0": {"Crevillo\\EzSocialLoginBundle": ""}
+  },
+  "target-dir": "Crevillo/EzSocialLoginBundle"
+}
