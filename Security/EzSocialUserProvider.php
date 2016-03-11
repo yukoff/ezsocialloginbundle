@@ -36,7 +36,7 @@ class EzSocialUserProvider implements OAuthAwareUserProviderInterface
             $response->getNickName(),
             $response->getEmail(),
             md5($response->getEmail() . $response->getNickname() . time()),
-            'eng-GB', // @todo get default language here
+            'eng-GB', // @todo get default site language here
             $repository->getContentTypeService()->loadContentTypeByIdentifier('user')
         );
 

@@ -71,14 +71,14 @@ just add [these lines](https://github.com/crevillo/ezsocialloginbundle/blob/mast
 
 You will need to modify your config.yml file adding 
 
-```
+```yaml
 hwi_oauth:
     # list of names of the firewalls in which this bundle is active, this setting MUST be set
     firewall_names: [ezpublish_front]
 ```    
 
 Next, you can add your google app information and options under hwi_oauth > resource_owners settings
-```
+```yaml
 hwi_oauth:
     # list of names of the firewalls in which this bundle is active, this setting MUST be set
     firewall_names: [ezpublish_front]
