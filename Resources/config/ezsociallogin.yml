@@ -1,0 +1,4 @@
+system:
+    default:
+        user:
+            login_template: CrevilloEzSocialLoginBundle:Security:login.html.twig
