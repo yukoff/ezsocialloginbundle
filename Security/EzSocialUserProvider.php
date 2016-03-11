@@ -44,7 +44,7 @@ class EzSocialUserProvider implements OAuthAwareUserProviderInterface
         $userCreateStruct->setField('last_name', $response->getLastName());
 
         $repositoryUser = $repository->sudo(
-            function($repository) use($userService, $userCreateStruct) {
+            function() use($userService, $userCreateStruct) {
                 $userGroup = $userService->loadUserGroup('11'); // guest accounts
                 return $userService->createUser($userCreateStruct, array($userGroup));
             }
