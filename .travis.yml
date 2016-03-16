@@ -1,0 +1,36 @@
+language: php
+sudo: required
+
+matrix:
+  # mark as finished before allow_failures are run
+  fast_finish: true
+  include:
+    # 5.5
+    - php: 5.5
+      env: TEST_CONFIG="phpunit.xml.dist"
+     # 5.6
+    - php: 5.6
+      env: TEST_CONFIG="phpunit.xml.dist"
+    # 7.0
+    - php: 7.0
+      env: TEST_CONFIG="phpunit.xml.dist"
+
+# setup requirements for running unit/behat tests
+before_script:
+  # Prepare system
+  - if [ "$TEST_CONFIG" != "" ] ; then ./bin/.travis/prepare_unittest.sh ; fi
+  # Detecting timezone issues by testing on random timezone
+  - TEST_TIMEZONES=("America/New_York" "Asia/Calcutta" "UTC")
+  - TEST_TIMEZONE=${TEST_TIMEZONES["`shuf -i 0-2 -n 1`"]}
+
+# execute phpunit or behat as the script command
+script:
+  - if [ "$TEST_CONFIG" != "" ] ; then php -d date.timezone=$TEST_TIMEZONE -d memory_limit=-1 vendor/bin/phpunit -c $TEST_CONFIG ; fi
+
+# disable mail notifications
+notifications:
+  email: true
+
+# reduce depth (history) of git checkout
+git:
+  depth: 30
