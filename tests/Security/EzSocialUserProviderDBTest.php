@@ -96,7 +96,6 @@ class EzSocialUserProviderDBTest extends BaseServiceTest
 
         $newCountUsers = $this->repository->getSearchService()->findLocations( $query )->totalCount;
         self::assertEquals($newCountUsers, $countUsers + 1);
-
     }
 
     protected function createUserResponseMock()

@@ -10,7 +10,7 @@ Installation
 ------------
 You can install this project via composer:
 ```
-composer require crevillo/ezsocialloginbundle:dev-master
+composer require crevillo/ezsocialloginbundle
 ```
 
 Documentation
