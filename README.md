@@ -1,6 +1,8 @@
 Ez Social Login Bundle
 ======================
 
+[![Build Status](https://secure.travis-ci.org/crevillo/ezsocialloginbundle.svg?branch=master)](http://travis-ci.org/crevillo/ezsocialloginbundle)
+
 The eZ Social Login Bundle adds support for authenticating users via OAuth1.0a or OAuth2 in eZ Platform.
 
 It just uses [HwiOauthBundle](https://github.com/hwi/HWIOAuthBundle), so you can refer to this documentation 
