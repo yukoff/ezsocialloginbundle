@@ -1,7 +1,7 @@
 Ez Social Login Bundle
 ======================
 
-[![Build Status](https://secure.travis-ci.org/crevillo/ezsocialloginbundle.svg?branch=master)](http://travis-ci.org/crevillo/ezsocialloginbundle)
+[![Build Status](https://secure.travis-ci.org/crevillo/ezsocialloginbundle.svg?branch=master)](http://travis-ci.org/crevillo/ezsocialloginbundle)[![Latest Stable Version](https://poser.pugx.org/crevillo/ezsocialloginbundle/v/stable.svg)](https://packagist.org/packages/crevillo/ezsocialloginbundle)
 
 The eZ Social Login Bundle adds support for authenticating users via OAuth1.0a or OAuth2 in eZ Platform.
 
