@@ -7,10 +7,10 @@ matrix:
   include:
     # 5.5
     - php: 5.5
-      env: TEST_CONFIG="phpunit.xml.dist"
-     # 5.6
+      env: TEST_CONFIG="phpunit.xml.dist" SYMFONY_VERSION="~2.7.0"
+    # 5.6
     - php: 5.6
-      env: TEST_CONFIG="phpunit.xml.dist"
+      env: TEST_CONFIG="phpunit.xml.dist" SYMFONY_VERSION="~2.7.0"
     # 7.0
     - php: 7.0
       env: TEST_CONFIG="phpunit.xml.dist"
@@ -22,6 +22,9 @@ before_script:
   # Detecting timezone issues by testing on random timezone
   - TEST_TIMEZONES=("America/New_York" "Asia/Calcutta" "UTC")
   - TEST_TIMEZONE=${TEST_TIMEZONES["`shuf -i 0-2 -n 1`"]}
+  # symlink config.php file
+  - if [ ! -f vendor/ezsystems/ezpublish-kernel/config.php ]; then ln -s config.php-DEVELOPMENT vendor/ezsystems/ezpublish-kernel/config.php ; fi
+
 
 # execute phpunit or behat as the script command
 script:

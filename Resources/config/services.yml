@@ -2,4 +2,9 @@ services:
     crevillo.ezsocialloginbundle.oauth_aware.user_provider.service:
         class: Crevillo\EzSocialLoginBundle\Security\EzSocialUserProvider
         arguments:
+            - '@crevillo.ezsocialloginbundle.user_manager'
+
+    crevillo.ezsocialloginbundle.user_manager:
+        class: Crevillo\EzSocialLoginBundle\Core\EzSocialLoginUserManager
+        arguments:
             - '@ezpublish.api.inner_repository'

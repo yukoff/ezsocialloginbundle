@@ -2,8 +2,8 @@
 
 namespace Crevillo\EzSocialLoginBundle\Security;
 
+use Crevillo\EzSocialLoginBundle\Core\EzSocialLoginUserManager;
 use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\MVC\Symfony\Security\User;
 use eZ\Publish\Core\Repository\Values\User\User as APIUser;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -13,6 +13,7 @@ use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Serializer\Exception\UnsupportedException;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
  * Class EzSocialUserProvider
@@ -21,9 +22,9 @@ class EzSocialUserProvider implements UserProviderInterface,
     OAuthAwareUserProviderInterface
 {
     /**
-     * @var Repository
+     * @var EzSocialLoginUserManager
      */
-    private $repository;
+    private $userManager;
 
     /**
      * @var string
@@ -37,9 +38,9 @@ class EzSocialUserProvider implements UserProviderInterface,
         'identifier' => 'id',
     );
 
-    public function __construct(Repository $repository)
+    public function __construct(EzSocialLoginUserManager $userManager)
     {
-        $this->repository = $repository;
+        $this->userManager = $userManager;
         $this->class = 'eZ\Publish\Core\MVC\Symfony\Security\User';
     }
 
@@ -48,7 +49,26 @@ class EzSocialUserProvider implements UserProviderInterface,
      */
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
-        $user = $this->findUserFromResponse($response);
+        try {
+            $user = $this->userManager->findUser($response->getUsername());
+        }
+        catch (NotFoundException $e) {
+            $username = $response->getUsername();
+            $firstName = $response->getFirstName() != '' ? $response->getFirstName() : $username;
+            $lastName =  $response->getLastName() != '' ? $response->getLastName() : $username;
+
+            try {
+                $user = $this->userManager->createNewUser(
+                    $username,
+                    $response->getEmail(),
+                    $firstName,
+                    $lastName
+                );
+            }
+            catch (\Exception $e) {
+                throw $e;
+            }
+        }
 
         return new User($user);
     }
@@ -84,56 +104,5 @@ class EzSocialUserProvider implements UserProviderInterface,
                 array('login' => $username)
             )
         );
-    }
-
-    /**
-     * @param UserResponseInterface $response
-     *
-     * @return object
-     */
-    protected function findUserFromResponse(UserResponseInterface $response)
-    {
-        try {
-            $user = $this->repository->getUserService()->loadUserByLogin(
-                $response->getUsername()
-            );
-        } catch (\eZ\Publish\API\Repository\Exceptions\NotFoundException $e) {
-            $user = $this->createNewUserFromResponse($response);
-        }
-
-        return $user;
-    }
-
-    /**
-     * Create a new user in the repository
-     *
-     * @param UserResponseInterface $response
-     * @return \eZ\Publish\Core\MVC\Symfony\Security\User
-     */
-    private function createNewUserFromResponse(UserResponseInterface $response)
-    {
-        $userService = $this->repository->getUserService();
-        $userCreateStruct = $userService->newUserCreateStruct(
-            $response->getUsername(),
-            $response->getEmail(),
-            md5($response->getEmail() . $response->getNickname() . time()),
-            'eng-GB', // @todo get default site language here
-            $this->repository->getContentTypeService()->loadContentTypeByIdentifier('user')
-        );
-
-        $userCreateStruct->setField('first_name', $response->getFirstName());
-        $userCreateStruct->setField('last_name', $response->getLastName());
-
-        $repositoryUser = $this->repository->sudo(
-            function () use ($userService, $userCreateStruct) {
-                $userGroup = $userService->loadUserGroup('11'); // guest accounts
-                return $userService->createUser(
-                    $userCreateStruct,
-                    array($userGroup)
-                );
-            }
-        );
-
-        return $repositoryUser;
     }
 }
