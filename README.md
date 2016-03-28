@@ -99,11 +99,11 @@ It should implement the interface: ```HWI\Bundle\OAuthBundle\Security\Core\User\
 This bundle provides [this service](https://github.com/crevillo/ezsocialloginbundle/blob/master/Security/EzSocialUserProvider.php) as an starting
 point, but you are free to create your own. 
 
-Our UserProvider will try to get the email from the social network. If there as already any user in the eZ Platform
-repository with this mail, it will just return it. 
+Our UserProvider will try to get the username from the social network. If there as already any user in the eZ Platform
+repository with this username, it will just return it. 
 
-If there is no user having that email, it will try to create a new one under your "Guest Accounts" user group and
-will also log it.
+If there is no user having that username, it will try to create a new one under your "Guest Accounts" user group and
+will also log in it.
 
 ### F) Configure the oauth firewall
 
@@ -137,7 +137,6 @@ google_login:
     path: /login/check-google
 ```
 
-* Actually this is manually tested and seems to work for Facebook, Google and Linkedin. 
-* Twitter doesn't provide the email of the logged user. I haven't tested this bundle with it yet. 
+* Actually this is manually tested and seems to work for Facebook, Google and Linkedin.  
 
 That's it!. Feel free to try any other social networks!. 

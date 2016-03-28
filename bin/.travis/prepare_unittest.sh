@@ -17,3 +17,5 @@ if [ "$SYMFONY_VERSION" != "" ] ; then composer require --no-update symfony/symf
 
 # Install packages using composer
 composer install -v --no-progress --no-interaction
+
+

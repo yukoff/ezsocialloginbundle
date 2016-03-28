@@ -2,6 +2,7 @@
 
 namespace Crevillo\EzSocialLoginBundle\Tests\Security;
 
+use Crevillo\EzSocialLoginBundle\Core\EzSocialLoginUserManager;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\User\UserCreateStruct;
@@ -23,7 +24,9 @@ class EzSocialUserProviderTest extends BaseServiceMockTest
     public function setUp()
     {
         $this->provider = new EzSocialUserProvider(
-            $this->getRepository()
+            new EzSocialLoginUserManager(
+                $this->getRepository()
+            )
         );
     }
 
@@ -74,26 +77,19 @@ class EzSocialUserProviderTest extends BaseServiceMockTest
             ->method('getUsername')
             ->will($this->returnValue('asm89'));
 
-        $userServiceMock = $this->getPartlyMockedUserService(
-            array('loadUserByLogin')
-        );
-
-        $userServiceMock
+        $eZSocialUserManagerMock = $this->getEzSocialUserManagerMock();
+        $eZSocialUserManagerMock
             ->expects($this->once())
-            ->method('loadUserByLogin')
-            ->with($responseMock->getUserName())
+            ->method('findUser')
             ->willReturn(
                 new APIUser(
-                    array('login' => 'asm89')
+                    array(
+                        'login' => 'asm89'
+                    )
                 )
             );
 
-        $repositoryMock = $this->getRepositoryMock();
-        $repositoryMock->expects($this->atLeastOnce())
-            ->method('getUserService')
-            ->willReturn($userServiceMock);
-
-        $provider = new EzSocialUserProvider($repositoryMock);
+        $provider = new EzSocialUserProvider($eZSocialUserManagerMock);
         $user = $provider->loadUserByOAuthUserResponse($responseMock);
 
         $this->assertInstanceOf('eZ\Publish\Core\MVC\Symfony\Security\User', $user);
@@ -108,51 +104,17 @@ class EzSocialUserProviderTest extends BaseServiceMockTest
             ->method('getUsername')
             ->will($this->returnValue('asm89'));
 
-        $userServiceMock = $this->getPartlyMockedUserService(
-            array('loadUserByLogin', 'newUserCreateStruct')
-        );
-
-        $userServiceMock
+        $eZSocialUserManagerMock = $this->getEzSocialUserManagerMock();
+        $eZSocialUserManagerMock
             ->expects($this->once())
-            ->method('loadUserByLogin')
-            ->with($responseMock->getUserName())
+            ->method('findUser')
             ->willThrowException(
                 new NotFoundException('user', 'asm89')
             );
 
-        $contentTypeServiceMock = $this->getContentTypeServiceMock();
-        $contentTypeServiceMock
+        $eZSocialUserManagerMock
             ->expects($this->once())
-            ->method('loadContentTypeByIdentifier')
-            ->with('user')
-            ->willReturn(
-                new ContentType(
-                    array(
-                        'id' => 4,
-                        'fieldDefinitions' => array()
-                    )
-                )
-            );
-
-        $repositoryMock = $this->getRepositoryMock();
-        $repositoryMock->expects($this->atLeastOnce())
-            ->method('getUserService')
-            ->willReturn($userServiceMock);
-        $repositoryMock->expects($this->once())
-            ->method('getContentTypeService')
-            ->willReturn($contentTypeServiceMock);
-
-        $userCreateStructMock = $this->getUserCreateStructMock();
-        $userServiceMock
-            ->expects($this->once())
-            ->method('newUserCreateStruct')
-            ->willReturn(
-                $userCreateStructMock
-            );
-
-        $repositoryMock
-            ->expects($this->once())
-            ->method('sudo')
+            ->method('createNewUser')
             ->willReturn(
                 new APIUser(
                     array(
@@ -161,7 +123,7 @@ class EzSocialUserProviderTest extends BaseServiceMockTest
                 )
             );
 
-        $provider = new EzSocialUserProvider($repositoryMock);
+        $provider = new EzSocialUserProvider($eZSocialUserManagerMock);
         $user = $provider->loadUserByOAuthUserResponse($responseMock);
 
         $this->assertInstanceOf('eZ\Publish\Core\MVC\Symfony\Security\User', $user);
@@ -176,54 +138,6 @@ class EzSocialUserProviderTest extends BaseServiceMockTest
         );
     }
 
-    protected function getUserServiceMock()
-    {
-        return $this->getMock(
-            'eZ\Publish\API\Repository\UserService'
-        );
-    }
-
-    protected function getContentTypeServiceMock()
-    {
-        return  $this->getMock(
-            'eZ\Publish\API\Repository\ContentTypeService'
-        );
-    }
-
-    protected function getUserCreateStructMock()
-    {
-        return $this->getMock(
-            'eZ\Publish\Core\Repository\Values\User\UserCreateStruct',
-            array(),
-            array(
-                array(
-                    'login' => 'asm89'
-                )
-            )
-        );
-    }
-
-    /**
-     * Returns the User service to test with $methods mocked.
-     *
-     * Injected Repository comes from {@see getRepositoryMock()} and persistence handler from {@see getPersistenceMock()}
-     *
-     * @param string[] $methods
-     *
-     * @return \eZ\Publish\Core\Repository\UserService|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getPartlyMockedUserService(array $methods = null)
-    {
-        return $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\UserService',
-            $methods,
-            array(
-                $this->getRepositoryMock(),
-                $this->getPersistenceMock()->userHandler(),
-            )
-        );
-    }
-
     protected function getRepositoryMock() {
         return $this->getMock(
             'eZ\\Publish\\Core\\Repository\\Repository',
@@ -233,6 +147,16 @@ class EzSocialUserProviderTest extends BaseServiceMockTest
                 $this->getSPIMockHandler('Search\\Handler'),
                 array(),
                 $this->getStubbedUser(14)
+            )
+        );
+    }
+
+    protected function getEzSocialUserManagerMock() {
+        return $this->getMock(
+            'Crevillo\\EzSocialLoginBundle\\Core\\EzSocialLoginUserManager',
+            array(),
+            array(
+                $this->getRepository()
             )
         );
     }
