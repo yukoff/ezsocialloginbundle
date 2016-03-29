@@ -1,6 +1,7 @@
 parameters:
     # override default linkedin resource owner
     hwi_oauth.resource_owner.linkedin.class: Crevillo\EzSocialLoginBundle\OAuth\ResourceOwner\LinkedinResourceOwner
+    hwi_oauth.resource_owner.twitter.class: Crevillo\EzSocialLoginBundle\OAuth\ResourceOwner\TwitterResourceOwner
 
 services:
     crevillo.ezsocialloginbundle.oauth_aware.user_provider.service:
