@@ -18,8 +18,7 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 /**
  * Class EzSocialUserProvider
  */
-class EzSocialUserProvider implements UserProviderInterface,
-    OAuthAwareUserProviderInterface
+class EzSocialUserProvider implements UserProviderInterface, OAuthAwareUserProviderInterface
 {
     /**
      * @var EzSocialLoginUserManager
@@ -51,8 +50,7 @@ class EzSocialUserProvider implements UserProviderInterface,
     {
         try {
             $user = $this->userManager->findUser($response->getUsername());
-        }
-        catch (NotFoundException $e) {
+        } catch (NotFoundException $e) {
             $username = $response->getUsername();
             $firstName = $response->getFirstName() != '' ? $response->getFirstName() : $username;
             $lastName =  $response->getLastName() != '' ? $response->getLastName() : $username;
@@ -64,8 +62,7 @@ class EzSocialUserProvider implements UserProviderInterface,
                     $firstName,
                     $lastName
                 );
-            }
-            catch (\Exception $e) {
+            } catch (\Exception $e) {
                 throw $e;
             }
         }

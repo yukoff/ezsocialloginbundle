@@ -14,10 +14,10 @@
     "hwi/oauth-bundle": "0.4.*"
   },
   "require-dev": {
-    "phpunit/phpunit": "~4.7"
+    "phpunit/phpunit": "~4.7",
+    "squizlabs/php_codesniffer": "2.*"
   },
   "autoload": {
-    "psr-0": {"Crevillo\\EzSocialLoginBundle": ""}
-  },
-  "target-dir": "Crevillo/EzSocialLoginBundle"
+    "psr-0": {"Crevillo\\EzSocialLoginBundle": "src"}
+  }
 }

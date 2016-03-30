@@ -31,8 +31,7 @@ class EzSocialLoginUserManager
             $user = $this->repository->getUserService()->loadUserByLogin(
                 $username
             );
-        }
-        catch (NotFoundException $e) {
+        } catch (NotFoundException $e) {
             throw $e;
         }
 
@@ -52,8 +51,7 @@ class EzSocialLoginUserManager
         $email,
         $firstName,
         $lastName
-    )
-    {
+    ) {
         $userService = $this->repository->getUserService();
         $userCreateStruct = $userService->newUserCreateStruct(
             $login,
