@@ -137,6 +137,6 @@ google_login:
     path: /login/check-google
 ```
 
-* Actually this is manually tested and seems to work for Facebook, Google and Linkedin.  
+* Actually this is manually tested and seems to work for Facebook, Twitter, Google and Linkedin.  
 
 That's it!. Feel free to try any other social networks!. 
