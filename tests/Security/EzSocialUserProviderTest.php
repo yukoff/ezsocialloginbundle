@@ -74,8 +74,8 @@ class EzSocialUserProviderTest extends BaseServiceMockTest
         $responseMock = $this->createUserResponseMock();
         $responseMock
             ->expects($this->atLeastOnce())
-            ->method('getUsername')
-            ->will($this->returnValue('asm89'));
+            ->method('getEmail')
+            ->will($this->returnValue('asm89@ez.no'));
 
         $eZSocialUserManagerMock = $this->getEzSocialUserManagerMock();
         $eZSocialUserManagerMock
@@ -84,7 +84,8 @@ class EzSocialUserProviderTest extends BaseServiceMockTest
             ->willReturn(
                 new APIUser(
                     array(
-                        'login' => 'asm89'
+                        'login' => 'asm89',
+                        'email' => 'asm89@ez.no'
                     )
                 )
             );
@@ -94,6 +95,7 @@ class EzSocialUserProviderTest extends BaseServiceMockTest
 
         $this->assertInstanceOf('eZ\Publish\Core\MVC\Symfony\Security\User', $user);
         $this->assertEquals('asm89', $user->getUsername());
+        $this->assertEquals('asm89@ez.no', $user->getAPIUser()->email);
     }
 
     public function testLoadUserByOAuthUserResponseWhenUserIsNotPresent()
@@ -101,8 +103,8 @@ class EzSocialUserProviderTest extends BaseServiceMockTest
         $responseMock = $this->createUserResponseMock();
         $responseMock
             ->expects($this->atLeastOnce())
-            ->method('getUsername')
-            ->will($this->returnValue('asm89'));
+            ->method('getEmail')
+            ->will($this->returnValue('asm89@ez.no'));
 
         $eZSocialUserManagerMock = $this->getEzSocialUserManagerMock();
         $eZSocialUserManagerMock

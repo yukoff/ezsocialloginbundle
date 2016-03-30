@@ -18,7 +18,8 @@ class EzSocialLoginUserManager
     }
 
     /**
-     * Find de user with login = username
+     * Finds a user with login = username
+     * Try to find it by e-mail if not found
      *
      * @param $username
      * @throws NotFoundException
@@ -28,11 +29,14 @@ class EzSocialLoginUserManager
     public function findUser($username)
     {
         try {
-            $user = $this->repository->getUserService()->loadUserByLogin(
-                $username
-            );
+            $user = $this->repository->getUserService()->loadUserByLogin($username);
         } catch (NotFoundException $e) {
-            throw $e;
+            $users = $this->repository->getUserService()->loadUsersByEmail($username);
+            if (!empty($users)) {
+                $user = $users[0];
+            } else {
+                throw $e;
+            }
         }
 
         return $user;
