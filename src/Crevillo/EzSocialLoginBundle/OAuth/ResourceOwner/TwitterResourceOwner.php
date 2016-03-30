@@ -11,7 +11,7 @@ namespace Crevillo\EzSocialLoginBundle\OAuth\ResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\TwitterResourceOwner as HWITwitterResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class TwitterResourceOwner extends  HWITwitterResourceOwner
+class TwitterResourceOwner extends HWITwitterResourceOwner
 {
     /**
      * {@inheritdoc}
