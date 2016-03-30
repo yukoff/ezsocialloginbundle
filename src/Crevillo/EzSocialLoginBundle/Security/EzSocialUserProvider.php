@@ -49,11 +49,11 @@ class EzSocialUserProvider implements UserProviderInterface, OAuthAwareUserProvi
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
         try {
-            $user = $this->userManager->findUser($response->getUsername());
-        } catch (NotFoundException $e) {
-            $username = $response->getUsername();
-            $firstName = $response->getFirstName() != '' ? $response->getFirstName() : $username;
-            $lastName =  $response->getLastName() != '' ? $response->getLastName() : $username;
+            $user = $this->userManager->findUser($response->getEmail());
+        } catch (\Exception $e) {
+            $username = $response->getEmail();
+            $firstName = $response->getFirstName() != '' ? $response->getFirstName() : $response->getNickName();
+            $lastName =  $response->getLastName() != '' ? $response->getLastName() : '';
 
             try {
                 $user = $this->userManager->createNewUser(
