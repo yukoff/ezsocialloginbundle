@@ -43,6 +43,22 @@ class EzSocialUserManagerTest extends BaseServiceTest
         self::assertEquals('user@example.com', $user->email);
     }
 
+    /**
+     * Test manager will return the user by its login
+     */
+    public function testShouldGetTheUserByEmailWhenNotFoundByLogin()
+    {
+        $this->createUserVersion1();
+
+        $userManager = new EzSocialLoginUserManager($this->repository);
+
+        $user = $userManager->findUser('user@example.com');
+
+        self::assertInstanceOf('\\eZ\\Publish\\Core\\Repository\\Values\\User\\User', $user);
+        self::assertEquals('user', $user->login);
+        self::assertEquals('user@example.com', $user->email);
+    }
+
     public function testCreateUser()
     {
         $query = new LocationQuery();
