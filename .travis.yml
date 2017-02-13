@@ -12,10 +12,13 @@ matrix:
       env: TEST_CONFIG="phpunit.xml.dist" SYMFONY_VERSION="~2.7.0"
     # 5.6
     - php: 5.6
-      env: TEST_CONFIG="phpunit.xml.dist" SYMFONY_VERSION="~2.7.0"
+      env: TEST_CONFIG="phpunit.xml.dist" SYMFONY_VERSION="~2.8.0"
     # 7.0
     - php: 7.0
-      env: TEST_CONFIG="phpunit.xml.dist"
+      env: TEST_CONFIG="phpunit.xml.dist" SYMFONY_VERSION="^3.2"
+    # 7.1
+    - php: 7.1
+      env: TEST_CONFIG="phpunit.xml.dist" SYMFONY_VERSION="^3.2"
 
 # test only master (+ Pull requests)
 branches:

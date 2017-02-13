@@ -1,12 +1,12 @@
 <?php
 
-namespace Crevillo\EzSocialLoginBundle\Tests\Security;
+namespace Crevillo\EzSocialLoginBundle\Tests\Core;
 
 use Crevillo\EzSocialLoginBundle\Core\EzSocialLoginUserManager;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\User\UserCreateStruct;
-use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest;
+use eZ\Publish\API\Repository\Tests\BaseTest;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\User;
 use eZ\Publish\Core\MVC\Symfony\Security\User as eZUser;
@@ -16,7 +16,7 @@ use eZ\Publish\Core\Repository\Tests\Service\Integration\Legacy\Utils;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use Exception;
 
-class EzSocialUserManagerTest extends BaseServiceTest
+class EzSocialUserManagerTest extends BaseTest
 {
     protected function getRepository()
     {
